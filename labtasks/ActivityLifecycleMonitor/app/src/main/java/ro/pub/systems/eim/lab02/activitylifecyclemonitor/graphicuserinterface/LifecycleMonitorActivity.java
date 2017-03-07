@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.PopupWindow;
 
 import ro.pub.systems.eim.lab02.activitylifecyclemonitor.R;
@@ -52,6 +53,7 @@ public class LifecycleMonitorActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,71 @@ public class LifecycleMonitorActivity extends AppCompatActivity {
         Button cancelButton = (Button) findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(buttonClickListener);
 
-        Log.d(Constants.TAG, "onCreate() method was invoked without a previous state");
+        if (savedInstanceState == null)
+            Log.d("activitylifecyclemonito", "onCreate() method was invoked without a previous state");
+        else
+            Log.d("activitylifecyclemonito", "onCreate() method was invoked with a previous state");
     }
 
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("activitylifecyclemonito", "onRestart() method was invoked");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("activitylifecyclemonito", "onStart() method was invoked");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("activitylifecyclemonito", "onResume() method was invoked");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("activitylifecyclemonito", "onPause() method was invoked");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("activitylifecyclemonito", "onStop() method was invoked");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("activitylifecyclemonito", "onDestroy() method was invoked");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+
+        super.onSaveInstanceState(savedInstanceState);
+        CheckBox c = (CheckBox)findViewById(R.id.remember_me_checkbox);
+
+        if(c.isChecked()) {
+            EditText usernameEditText = (EditText) findViewById(R.id.username_edit_text);
+            savedInstanceState.putString(Constants.USERNAME_EDIT_TEXT, usernameEditText.getText().toString());
+            EditText passwordEditText = (EditText) findViewById(R.id.password_edit_text);
+            savedInstanceState.putString(Constants.PASSWORD_EDIT_TEXT, passwordEditText.getText().toString());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // apelarea metodei din activitatea parinte este recomandata, dar nu obligatorie
+        super.onRestoreInstanceState(savedInstanceState);
+        // ...
+        EditText usernameEditText= (EditText)findViewById(R.id.username_edit_text);
+        if (savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT) != null) {
+            usernameEditText.setText(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT));
+        }
+    }
 }
